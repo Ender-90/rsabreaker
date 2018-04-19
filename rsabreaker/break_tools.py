@@ -1,3 +1,6 @@
+from math import gcd
+
+
 def prime_factors_to_list(int_to_factors):
     factor_rest = int_to_factors
     prime_factor_list = [[0, 0]]
@@ -25,6 +28,10 @@ def phi(a):
     for i in range(1,len(prime_list)):
         result *= (prime_list[i][0] ** (prime_list[i][1] - 1)) * (prime_list[i][0] - 1)
     return result
+
+
+def is_relative_prime(n, m):
+    return gcd(n, m) == 1
 
 
 def euclidean_algorithm(n, m):

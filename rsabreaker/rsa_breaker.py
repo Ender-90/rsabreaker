@@ -1,7 +1,6 @@
 from key import Key
 import input_lib as il
 import break_tools as bt
-from math import gcd
 
 
 class RSABreaker:
@@ -15,17 +14,11 @@ class RSABreaker:
         user_input = il.input_positive_integer()
         self.public_key.set_modulus(user_input)
         print("Set exponent of public key.")
-        user_input = self.input_public_exponent()
-        self.public_key.set_exponent(user_input)
-
-    def input_public_exponent(self):
-        tmp_exponent = il.input_positive_integer()
-
-        while gcd(bt.phi(self.public_key.get_modulus()), tmp_exponent) != 1 or tmp_exponent >= bt.phi(self.public_key.get_modulus()):
+        user_input = il.input_positive_integer()
+        while (not bt.is_relative_prime(user_input, bt.phi(self.public_key.get_modulus()))) or user_input >= bt.phi(self.public_key.get_modulus()):
             print("Requirements for exponent has not been.\nPlease try again.")
-            tmp_exponent = il.input_positive_integer()
-
-        return tmp_exponent
+            user_input = il.input_positive_integer()
+        self.public_key.set_exponent(user_input)
 
     def display_public_key(self):
         if self.public_key:
@@ -59,4 +52,11 @@ if __name__ == "__main__":
 
     breaker.break_the_key()
     breaker.display_private_key()
+
+    m = breaker.public_key.get_modulus()
+    e_pu = breaker.public_key.get_exponent()
+    e_pr = breaker.private_key.get_exponent()
+
+    c = (20 ** e_pu) % m
+    print((c ** e_pr) % m == 20)
 
