@@ -1,6 +1,7 @@
 from key import Key
 import input_lib as il
 import break_tools as bt
+from math import gcd
 
 
 class RSABreaker:
@@ -20,8 +21,8 @@ class RSABreaker:
     def input_public_exponent(self):
         tmp_exponent = il.input_positive_integer()
 
-        while self.public_key.get_modulus() % tmp_exponent != 1 or tmp_exponent >= self.public_key.get_modulus():
-            print("Exponent has to be relative prime to modulus and has to be smaller than modulus.\nPlease try again.")
+        while gcd(bt.phi(self.public_key.get_modulus()), tmp_exponent) != 1 or tmp_exponent >= bt.phi(self.public_key.get_modulus()):
+            print("Requirements for exponent has not been.\nPlease try again.")
             tmp_exponent = il.input_positive_integer()
 
         return tmp_exponent
