@@ -1,6 +1,6 @@
 from key import Key
 import input_lib as il
-import  break_tools as bt
+import break_tools as bt
 
 
 class RSABreaker:
@@ -14,18 +14,29 @@ class RSABreaker:
         user_input = il.input_positive_integer()
         self.public_key.set_modulus(user_input)
         print("Set exponent of public key.")
-        user_input = il.input_positive_integer()
+        user_input = self.input_public_exponent()
         self.public_key.set_exponent(user_input)
+
+    def input_public_exponent(self):
+        tmp_exponent = il.input_positive_integer()
+
+        while self.public_key.get_modulus() % tmp_exponent != 1 or tmp_exponent >= self.public_key.get_modulus():
+            print("Exponent has to be relative prime to modulus and has to be smaller than modulus.\nPlease try again.")
+            tmp_exponent = il.input_positive_integer()
+
+        return tmp_exponent
 
     def display_public_key(self):
         if self.public_key:
-            print("Public Key.\n\nModulus: {0}.\nExponent: {1}".format(self.public_key.get_modulus(), self.public_key.get_exponent()))
+            print("Public Key.\n\nModulus: {0}.\nExponent: {1}".format(self.public_key.get_modulus(),
+                                                                       self.public_key.get_exponent()))
         else:
             print("Public key has not been set. Please set it first")
 
     def display_private_key(self):
         if self.private_key:
-            print("Private Key.\n\nModulus: {0}.\nExponent: {1}".format(self.private_key.modulus, self.private_key.exponent))
+            print("Private Key.\n\nModulus: {0}.\nExponent: {1}".format(self.private_key.modulus,
+                                                                        self.private_key.exponent))
         else:
             print("There is no private key. Please set public key and break it to obtain private key.")
 
